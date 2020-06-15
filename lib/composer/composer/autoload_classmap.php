@@ -938,6 +938,7 @@ return array(
     'OC\\DB\\SchemaWrapper' => $baseDir . '/lib/private/DB/SchemaWrapper.php',
     'OC\\DB\\SetTransactionIsolationLevel' => $baseDir . '/lib/private/DB/SetTransactionIsolationLevel.php',
     'OC\\Dashboard\\DashboardManager' => $baseDir . '/lib/private/Dashboard/DashboardManager.php',
+    'OC\\Dashboard\\Manager' => $baseDir . '/lib/private/Dashboard/Manager.php',
     'OC\\DatabaseException' => $baseDir . '/lib/private/DatabaseException.php',
     'OC\\DatabaseSetupException' => $baseDir . '/lib/private/DatabaseSetupException.php',
     'OC\\DateTimeFormatter' => $baseDir . '/lib/private/DateTimeFormatter.php',

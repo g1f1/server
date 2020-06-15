@@ -967,6 +967,7 @@ class ComposerStaticInit53792487c5a8370acc0b06b1a864ff4c
         'OC\\DB\\SchemaWrapper' => __DIR__ . '/../../..' . '/lib/private/DB/SchemaWrapper.php',
         'OC\\DB\\SetTransactionIsolationLevel' => __DIR__ . '/../../..' . '/lib/private/DB/SetTransactionIsolationLevel.php',
         'OC\\Dashboard\\DashboardManager' => __DIR__ . '/../../..' . '/lib/private/Dashboard/DashboardManager.php',
+        'OC\\Dashboard\\Manager' => __DIR__ . '/../../..' . '/lib/private/Dashboard/Manager.php',
         'OC\\DatabaseException' => __DIR__ . '/../../..' . '/lib/private/DatabaseException.php',
         'OC\\DatabaseSetupException' => __DIR__ . '/../../..' . '/lib/private/DatabaseSetupException.php',
         'OC\\DateTimeFormatter' => __DIR__ . '/../../..' . '/lib/private/DateTimeFormatter.php',
