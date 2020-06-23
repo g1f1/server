@@ -29,6 +29,7 @@ use Closure;
 use OC\Support\CrashReport\Registry;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
+use OCP\Dashboard\IManager;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\ILogger;
 use Throwable;
@@ -40,6 +41,9 @@ class RegistrationContext {
 
 	/** @var array[] */
 	private $crashReporters = [];
+
+	/** @var array[] */
+	private $dashboardPanels = [];
 
 	/** @var array[] */
 	private $services = [];
@@ -87,6 +91,13 @@ class RegistrationContext {
 				$this->context->registerCrashReporter(
 					$this->appId,
 					$reporterClass
+				);
+			}
+
+			public function registerDashboardPanel(string $panelClass): void {
+				$this->context->registerDashboardPanel(
+					$this->appId,
+					$panelClass
 				);
 			}
 
@@ -144,6 +155,13 @@ class RegistrationContext {
 		$this->crashReporters[] = [
 			'appId' => $appId,
 			'class' => $reporterClass,
+		];
+	}
+
+	public function registerDashboardPanel(string $appId, string $panelClass): void {
+		$this->dashboardPanels[] = [
+			'appId' => $appId,
+			'class' => $panelClass
 		];
 	}
 
@@ -218,6 +236,23 @@ class RegistrationContext {
 				$appId = $registration['appId'];
 				$this->logger->logException($e, [
 					'message' => "Error during crash reporter registration of $appId: " . $e->getMessage(),
+					'level' => ILogger::ERROR,
+				]);
+			}
+		}
+	}
+
+	/**
+	 * @param App[] $apps
+	 */
+	public function delegateDashboardPanelRegistrations(array $apps, IManager $dashboardManager): void {
+		foreach ($this->dashboardPanels as $panel) {
+			try {
+				$dashboardManager->lazyRegisterPanel($panel['class']);
+			} catch (Throwable $e) {
+				$appId = $panel['appId'];
+				$this->logger->logException($e, [
+					'message' => "Error during dashboard registration of $appId: " . $e->getMessage(),
 					'level' => ILogger::ERROR,
 				]);
 			}

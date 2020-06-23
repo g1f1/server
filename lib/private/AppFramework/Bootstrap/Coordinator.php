@@ -30,6 +30,7 @@ use OC_App;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\QueryException;
+use OCP\Dashboard\IManager;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\ILogger;
 use OCP\IServerContainer;
@@ -46,6 +47,9 @@ class Coordinator {
 	/** @var Registry */
 	private $registry;
 
+	/** @var IManager */
+	private $dashboardManager;
+
 	/** @var IEventDispatcher */
 	private $eventDispatcher;
 
@@ -54,10 +58,12 @@ class Coordinator {
 
 	public function __construct(IServerContainer $container,
 								Registry $registry,
+								IManager $dashboardManager,
 								IEventDispatcher $eventListener,
 								ILogger $logger) {
 		$this->serverContainer = $container;
 		$this->registry = $registry;
+		$this->dashboardManager = $dashboardManager;
 		$this->eventDispatcher = $eventListener;
 		$this->logger = $logger;
 	}
@@ -109,6 +115,7 @@ class Coordinator {
 		 */
 		$context->delegateCapabilityRegistrations($apps);
 		$context->delegateCrashReporterRegistrations($apps, $this->registry);
+		$context->delegateDashboardPanelRegistrations($apps, $this->dashboardManager);
 		$context->delegateEventListenerRegistrations($this->eventDispatcher);
 		$context->delegateContainerRegistrations($apps);
 		$context->delegateMiddlewareRegistrations($apps);
