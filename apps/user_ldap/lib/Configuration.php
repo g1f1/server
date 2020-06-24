@@ -110,6 +110,7 @@ class Configuration {
 		'ldapDynamicGroupMemberURL' => null,
 		'ldapDefaultPPolicyDN' => null,
 		'ldapExtStorageHomeAttribute' => null,
+		'ldapMatchingRuleInChainState' => 'unknown',
 	];
 
 	/**
@@ -482,6 +483,7 @@ class Configuration {
 			'ldap_default_ppolicy_dn'           => '',
 			'ldap_user_avatar_rule'             => 'default',
 			'ldap_ext_storage_home_attribute'   => '',
+			'ldap_matching_rule_in_chain_state' => 'unknown',
 		];
 	}
 
@@ -543,6 +545,7 @@ class Configuration {
 			'ldap_dynamic_group_member_url'     => 'ldapDynamicGroupMemberURL',
 			'ldap_default_ppolicy_dn'           => 'ldapDefaultPPolicyDN',
 			'ldap_ext_storage_home_attribute'   => 'ldapExtStorageHomeAttribute',
+			'ldap_matching_rule_in_chain_state' => 'ldapMatchingRuleInChainState',
 			'ldapIgnoreNamingRules'             => 'ldapIgnoreNamingRules',	// sysconfig
 		];
 		return $array;

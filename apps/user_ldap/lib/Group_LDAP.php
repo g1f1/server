@@ -234,6 +234,31 @@ class Group_LDAP extends BackendUtility implements \OCP\GroupInterface, IGroupLD
 		if ($groupMembers !== null) {
 			return $groupMembers;
 		}
+
+		if ($this->access->connection->ldapNestedGroups
+			&& $this->access->connection->useMemberOfToDetectMembership
+			&& $this->access->connection->hasMemberOfFilterSupport
+			&& $this->access->connection->ldapMatchingRuleInChainState !== 'unavailable'
+		) {
+			$attemptedLdapMatchingRuleInChain = true;
+			// compatibility hack with servers supporting :1.2.840.113556.1.4.1941:, and others)
+			$filter = $this->access->combineFilterWithAnd([$this->access->connection->ldapUserFilter, 'memberof:1.2.840.113556.1.4.1941:=' . $dnGroup]);
+			$memberRecords = $this->access->fetchListOfUsers(
+				$filter,
+				$this->access->userManager->getAttributes(true)
+			);
+			if (!empty($memberRecords)) {
+				if ($this->access->connection->ldapMatchingRuleInChainState === 'unknown') {
+					$this->access->connection->ldapMatchingRuleInChainState = 'available';
+					$this->access->connection->saveConfiguration();
+				}
+				return array_reduce($memberRecords, function ($carry, $record) {
+					$carry[] = $record['dn'][0];
+					return $carry;
+				}, []);
+			}
+		}
+
 		$seen[$dnGroup] = 1;
 		$members = $this->access->readAttribute($dnGroup, $this->access->connection->ldapGroupMemberAssocAttr);
 		if (is_array($members)) {
@@ -246,6 +271,10 @@ class Group_LDAP extends BackendUtility implements \OCP\GroupInterface, IGroupLD
 		$allMembers += $this->getDynamicGroupMembers($dnGroup);
 
 		$this->access->connection->writeToCache($cacheKey, $allMembers);
+		if (isset($attemptedLdapMatchingRuleInChain) && !empty($allMembers)) {
+			$this->access->connection->ldapMatchingRuleInChainState = 'unavailable';
+			$this->access->connection->saveConfiguration();
+		}
 		return $allMembers;
 	}
 
