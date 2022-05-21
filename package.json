@@ -72,7 +72,7 @@
     "marked": "^4.0.14",
     "moment": "^2.29.2",
     "moment-timezone": "^0.5.34",
-    "nextcloud-vue-collections": "^0.9.0",
+    "nextcloud-vue-collections": "^0.10.0",
     "p-limit": "^4.0.0",
     "p-queue": "^7.2.0",
     "path": "^0.12.7",
